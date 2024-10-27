@@ -1,5 +1,5 @@
 
-# Viitalink Voice Assistant
+# Vitalink Voice Assistant
 
 **Team Members:**  
 - Elizabeth Bruski  
