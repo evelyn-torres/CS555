@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { Button, TextField, Box, Typography, Container, Avatar } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import { useNavigate } from 'react-router-dom'; // Import useHistory for routing
 
 const Login = () => {
   // State to handle the email and password 
@@ -13,6 +14,11 @@ const Login = () => {
     event.preventDefault();
     // check check 
     console.log({ email, password });
+    if(email === 'email' && password === 'password'){
+      navigate('/chat');
+    }else{
+      alert('Invalid credentials. Please try again.');
+    }
   };
 
   return (
