@@ -3,16 +3,20 @@
 import React, { useState } from 'react';
 import { Button, TextField, Box, Typography, Container, Avatar } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
   // State to handle the email and password 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const navigate = useNavigate();
 
   const handleSubmit = (event) => {
     event.preventDefault();
     // check check 
+    // fake login, should check credentials here
     console.log({ email, password });
+    navigate('/home');
   };
 
   return (
