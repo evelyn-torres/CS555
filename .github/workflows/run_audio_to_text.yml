@@ -28,4 +28,4 @@ jobs:
 
       - name: Run test_audio_to_text script
         run: |
-          python ../AI/test_audio_to_text.py
+          python AI/test_audio_to_text.py
