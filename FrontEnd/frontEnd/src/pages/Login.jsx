@@ -1,28 +1,31 @@
-// src/pages/Login.jsx
-
 import React, { useState } from 'react';
 import { Button, TextField, Box, Typography, Container, Avatar } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { useNavigate } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom'; // Import useHistory for routing
+import axios from 'axios';
 
 const Login = () => {
-  // State to handle the email and password 
-  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    // check check 
-    // fake login, should check credentials here
-    console.log({ email, password });
-    if(email === 'email' && password === 'password'){
-      navigate('/chat');
-    }else{
-      alert('Invalid credentials. Please try again.');
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post('http://localhost:3000/login', {
+        username,
+        password,
+      });
+      if (response.status === 200) {
+        // Save authentication state in localStorage
+        localStorage.setItem('authenticated', 'true');
+        navigate('/home');
+      }
+    } catch (err) {
+      alert('Login error', err);
+      setError('Invalid username or password');
     }
-    navigate('/home');
   };
 
   return (
@@ -35,34 +38,28 @@ const Login = () => {
           alignItems: 'center',
         }}
       >
-        {/* Lock icon */}
         <Avatar sx={{ m: 1, bgcolor: 'purple' }}>
           <LockOutlinedIcon />
         </Avatar>
-       
 
-        {/* Title */}
         <Typography component="h1" variant="h5">
           Log In
         </Typography>
 
-        {/* the form */}
-        <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-          {/* Email input */}
+        <Box component="form" onSubmit={handleLogin} noValidate sx={{ mt: 1 }}>
           <TextField
             margin="normal"
             required
             fullWidth
-            id="email"
-            label="Email Address"
-            name="email"
-            autoComplete="email"
+            id="username"
+            label="Username"
+            name="username"
+            autoComplete="username"
             autoFocus
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
           />
 
-          {/* Password input */}
           <TextField
             margin="normal"
             required
@@ -76,7 +73,6 @@ const Login = () => {
             onChange={(e) => setPassword(e.target.value)}
           />
 
-          {/* Submit button */}
           <Button
             type="submit"
             fullWidth
@@ -85,6 +81,12 @@ const Login = () => {
           >
             Log In
           </Button>
+
+          {error && (
+            <Typography color="error" variant="body2" sx={{ mt: 2 }}>
+              {error}
+            </Typography>
+          )}
         </Box>
       </Box>
     </Container>
