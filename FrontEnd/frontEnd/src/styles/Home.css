@@ -1,0 +1,58 @@
+.header {
+    width: 100%;
+    position: absolute; /* Position at the top of the page */
+    top: 0;
+    text-align: center; /* Centers text horizontally */
+  }
+  
+  h1 {
+    font-size: 3.2em;
+    line-height: 1.1;
+    margin: 0; /* Removes default margin */
+    padding-top: 50px; /* Adds some space from the top */
+  }
+
+  .home-container {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+  }
+
+  
+  .big-button {
+    position: absolute;
+    width: 30vw; /* 30% of viewport width */
+    height: 30vw; /* Makes it a circle */
+    border-radius: 50%; /* Ensures circular shape */
+    font-size: 3em;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    background-color: #1a1a1a;
+    cursor: pointer;
+    transition: border-color 0.25s;
+    border: 2px solid transparent;
+  }
+  
+
+  .question-button {
+    left: 11vw; /* 5% padding from left side */
+    top: 50%;
+    transform: translateY(-50%); /* Center vertically */
+  }
+  
+  /* Right button styling */
+  .request-button {
+    right: 11vw; /* 5% padding from right side */
+    top: 50%;
+    transform: translateY(-50%); /* Center vertically */
+  }
+  
+  /* Button hover effects */
+  .question-button:hover,
+  .request-button:hover {
+    border-color: #2d37f8;
+    background-color: #646cff;
+  }
