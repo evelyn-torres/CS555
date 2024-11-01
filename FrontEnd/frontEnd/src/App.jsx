@@ -1,27 +1,44 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './styles/App.css'
-import Login from './pages/Login'
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import { Link } from 'react-router-dom';
-import ChatBotUI from './pages/chabotUI';
+import React, { Suspense, lazy, useEffect, useState } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import Navigation from './components/Navigation';
 
-const App = () => {
+const Home = lazy(() => import('./pages/Home'));
+const Login = lazy(() => import('./pages/Login'));
+
+function App() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  useEffect(() => {
+    const auth = localStorage.getItem('authenticated');
+    if (auth === 'true') {
+      setIsAuthenticated(true);
+    }
+  }, []);
+
+  console.log("App component rendered");
+
   return (
     <Router>
-      <div>
-        <nav>
-          <Link to="/chat">Go to Chatbot (Temporary Link)</Link>
-        </nav>
-      </div>
+      <Navigation />
 
-      <Routes>
-        <Route path="/" element={<Login />} />
-        <Route path="/chat" element={<ChatBotUI />} />
-      </Routes>
+      <Suspense fallback={<div>Loading...</div>}>
+        <Routes>
+          {/* Login route */}
+          <Route path="/" element={<Login />} />
+          
+          {/* Home route - requires authentication */}
+          <Route
+            path="/home"
+            element={
+              isAuthenticated ? <Home /> : <Navigate to="/" replace />
+            }
+          />
+        </Routes>
+      </Suspense>
     </Router>
+  );
   );
 }
 
+export default App;
 export default App;
