@@ -1,10 +1,13 @@
 /* src/components/Navigation.css */
 
 .navigation {
-    position: absolute; /* Positioning relative to the nearest positioned ancestor */
+  position: fixed;
+    /* position: absolute; Positioning relative to the nearest positioned ancestor */
+    position: fixed; 
     top: 0;
     right: 0;
     padding: 1rem; /* Add some spacing */
+    z-index: 10;
   }
   
   .nav-list {
