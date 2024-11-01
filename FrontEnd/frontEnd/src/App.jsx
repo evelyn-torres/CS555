@@ -37,6 +37,8 @@ function App() {
       </Suspense>
     </Router>
   );
+  );
 }
 
+export default App;
 export default App;
