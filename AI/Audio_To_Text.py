@@ -3,18 +3,23 @@
 
 import whisper
 
-def transcribe_audio(input_file='audio.mp3', output_file='transcription.txt', language='en'):
+# Constants
+DEFAULT_OUTPUT_FILE = 'transcription.txt'
+MODEL_NAME = 'turbo'
+
+def clear_output_file(output_file):
+    # Clears the content of the specified output file.
     with open(output_file, 'w') as file:
-        file.write('')  
+        file.write('')
 
-    model = whisper.load_model("turbo")
-
-    print(f"Processing audio with language: {language}...")
-
+def transcribe_audio(model, input_file, language='en'):
+    # Transcribes audio using the specified model.
+    print(f"Processing audio file '{input_file}' with language: {language}...")
     result = model.transcribe(input_file, language=language)
+    return result.get("text", "")
 
-    transcription = result.get("text", "")
-
+def save_transcription(transcription, output_file):
+    # Saves the transcription to an output file.
     if transcription:
         with open(output_file, 'w') as file:
             file.write(transcription)
@@ -22,6 +27,13 @@ def transcribe_audio(input_file='audio.mp3', output_file='transcription.txt', la
     else:
         print("No transcription available.")
 
+def transcribe_audio_file(input_file='audio.mp3', output_file=DEFAULT_OUTPUT_FILE, language='en'):
+    # Main function to manage transcription flow.
+    clear_output_file(output_file)
+    model = whisper.load_model("turbo")
+    transcription = transcribe_audio(model, input_file, language)
+    save_transcription(transcription, output_file)
+
 if __name__ == "__main__":
-    transcribe_audio(input_file='audio.mp3', language='en')  # English
+    transcribe_audio_file(input_file='audio.mp3', language='en')  # English
     # Change language='es', 'zh', or 'ko' for Spanish, Chinese, or Korean respectively.
