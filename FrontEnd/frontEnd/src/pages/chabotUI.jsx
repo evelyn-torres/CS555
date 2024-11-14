@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import '../styles/ChatBotUI.css';
 
+
 const ChatBotUI = () => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
 
+
+  //Bad Smell #1: Duplicated Code (handleEnter and handleSend)
   const handleSend = () => {
     if (input.trim()) {
       setMessages([...messages, { sender: 'user', text: input }]);
@@ -23,9 +26,9 @@ const ChatBotUI = () => {
     if(event.key ==='Enter'){
       handleSend();
     }
-  }
+    }
 
-  return (
+   return ( //Bad smell #2: Really long inline callback logic in the return funcition
     <div className="chatbot-container">
       <div className="chat-window">
         {messages.map((message, index) => (
