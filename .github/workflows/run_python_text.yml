@@ -1,4 +1,4 @@
-name: Run Audio to Text Tests
+name: Run Python Tests
 
 on:
   push:
@@ -31,3 +31,6 @@ jobs:
 
       - name: Run test_audio_to_text script
         run: python AI/test_audio_to_text.py
+      
+      - name: Run web scraper tests
+        run: python AI/test_webscraper.py
