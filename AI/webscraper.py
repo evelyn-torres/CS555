@@ -49,7 +49,7 @@ def is_allowed(url):
         return False
     return any(topic in url for topic in allowed_topics)
 
-def scrape_article(url):
+def scrape_article(url, save_dir='WebMD_Articles'):
     """Scrape content from an allowed article URL."""
     try:
         response = requests.get(url, headers=headers, timeout=10)
@@ -60,8 +60,8 @@ def scrape_article(url):
 
         # Save the article content to a .txt file
         if content:
-            os.makedirs('WebMD_Articles', exist_ok=True)
-            file_path = f'WebMD_Articles/{title[:50].replace(" ", "_")}.txt'
+            os.makedirs(save_dir, exist_ok=True)
+            file_path = os.path.join(save_dir, f'{title[:50].replace(" ", "_")}.txt')
             with open(file_path, 'w', encoding='utf-8') as file:
                 file.write(content)
             print(f"Saved article: {title}")
