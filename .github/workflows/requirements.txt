@@ -1,0 +1,4 @@
+openai-whisper
+requests
+beautifulsoup4
+fake-useragent

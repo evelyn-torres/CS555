@@ -1,10 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../styles/ChatBotUI.css';
 
 
-const ChatBotUI = () => {
+const ChatBotUIComp = () => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
+
+  // Fetch the initial question from the backend on component load
+  useEffect(() => {
+    fetch("http://localhost:5000/ask")
+      .then((response) => response.json())
+      .then((data) => {
+        setMessages([{ sender: 'ai', text: data.question }]);
+      })
+      .catch((error) => console.error('Error fetching initial question:', error));
+  }, []);
 
 
   //Bad Smell #1: Duplicated Code (handleEnter and handleSend)
@@ -12,6 +22,23 @@ const ChatBotUI = () => {
     if (input.trim()) {
       setMessages([...messages, { sender: 'user', text: input }]);
       setInput('');
+
+      //send the user response to backend
+      fetch("http://localhost:5000/response",{
+        method: 'POST',
+        headers:{
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({response:input}),
+      })
+      .then((response) => response.json())
+      .then((data) => {
+        setMessages((prevMessages)=>[
+          ...prevMessages,
+          {sender: 'ai', text: data.next_question},
+        ])
+      })
+      .catch((error) => console.error('Error sending response:', error));
 
       // Simulate AI response
       setTimeout(() => {
@@ -55,4 +82,4 @@ const ChatBotUI = () => {
   );
 };
 
-export default ChatBotUI;
+export default ChatBotUIComp;

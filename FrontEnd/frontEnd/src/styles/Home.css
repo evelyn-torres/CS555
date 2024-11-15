@@ -1,0 +1,70 @@
+/* Home container styling */
+.home-container {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  text-align: center;
+}
+
+/* Header styling remains unchanged */
+.header {
+  width: 100%;
+  position: absolute;
+  top: 0;
+}
+
+/* Circular button styling for general questions */
+.big-button {
+  position: absolute;
+  left: 11vw;
+  top: 50%;
+  width: 30vw;
+  height: 30vw;
+  border-radius: 50%;
+  font-size: 3em;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  background-color: #1a1a1a;
+  cursor: pointer;
+  transition: border-color 0.25s;
+  border: 2px solid transparent;
+  transform: translateY(-50%);
+}
+
+/* Hover effect for circular button */
+.big-button:hover {
+  border-color: #2d37f8;
+  background-color: #646cff;
+}
+
+/* Container for right-aligned, vertically stacked buttons */
+.episode-buttons {
+  position: absolute;
+  right: 15vw; /* Distance from right side of the viewport */
+  top: 20%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px; /* Spacing between buttons */
+}
+
+/* Styling for each rectangular button */
+.rect-button {
+  width: 200px;
+  padding: 15px 20px;
+  font-size: 1.2em;
+  font-weight: 500;
+  color: white;
+  background-color: #1a1a1a;
+  border: none;
+  border-radius: 25px; /* Rounded rectangle */
+  cursor: pointer;
+  transition: background-color 0.25s;
+}
+
+/* Hover effect for rectangular buttons */
+.rect-button:hover {
+  background-color: #646cff;
+}

@@ -1,0 +1,40 @@
+/* src/components/Navigation.css */
+
+.navigation {
+  position: fixed;
+    /* position: absolute; Positioning relative to the nearest positioned ancestor */
+    position: fixed; 
+    top: 0;
+    right: 0;
+    padding: 1rem; /* Add some spacing */
+    z-index: 10;
+  }
+  
+  .nav-list {
+    list-style-type: none; /* Remove default list styling */
+    margin: 0;
+    padding: 0;
+    display: flex; /* Display items in a row */
+    gap: 1rem; /* Space between each item */
+  }
+  
+  .nav-list li {
+    display: inline;
+  }
+  
+  .nav-list a {
+    text-decoration: none; /* Remove underline from links */
+    color: black; /* Set your desired link color */
+    padding: 0.5rem;
+    transition: color 0.3s ease-in-out;
+  }
+  
+  .nav-list a.active {
+    color: purple; /* Style for active links */
+    font-weight: bold;
+  }
+  
+  .nav-list a:hover {
+    color: grey; /* Change the color on hover for a better user experience */
+  }
+  
