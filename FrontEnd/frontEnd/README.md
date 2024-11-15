@@ -13,4 +13,10 @@ This code can be executed by running 'npm i' then 'npm run dev' from the FrontEn
 
 create a .env file and put the following in it
 
-- MONGO_URI=mongodb://127.0.0.1:27017/userDatabase
+MONGO_URI=mongodb://127.0.0.1:27017/userDatabase
+
+run: 
+node server.js
+
+IN A SEPARATE TERMINAL:
+npm run dev
