@@ -1,4 +1,3 @@
-// import react from "@vitejs/plugin-react-swc";
 // src/pages/Home.jsx
 
 import React from "react";
@@ -7,22 +6,25 @@ import "../styles/Home.css";
 const Home = () => {
   return (
     <div className="home-container">
-      <div class="header">
+      <div className="header">
         <h1>Vitalink Voice Assist</h1>
-        <h2>Click a button if you need assistance.</h2>
+        <h2>Select a topic for personalized assistance.</h2>
       </div>
-      <button class="question-button button big-button">
-        Ask a Question
-        {/* <NavLink
-          to="/"
-          className={({ isActive }) => (isActive ? "active" : "")}
-        >
-          Login
-        </NavLink> */}
+
+      {/* Circular button for general questions */}
+      <button className="big-button question-button">
+        General Questions
       </button>
-      <button class="request-button button big-button">
-        Request a Healthy Activity
-      </button>
+
+      {/* New vertically stacked rectangular buttons on the right */}
+      <div className="episode-buttons">
+        <h2>Explore a Specific Topic</h2>
+        <button className="rect-button">Hypertension</button>
+        <button className="rect-button">Diabetes</button>
+        <button className="rect-button">Diet Management</button>
+        <button className="rect-button">Sports & Exercise</button>
+        <button className="rect-button">Medication Guidance</button>
+      </div>
     </div>
   );
 };

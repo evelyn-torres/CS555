@@ -1,58 +1,70 @@
+/* Home container styling */
+.home-container {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  text-align: center;
+}
+
+/* Header styling remains unchanged */
 .header {
-    width: 100%;
-    position: absolute; /* Position at the top of the page */
-    top: 0;
-    text-align: center; /* Centers text horizontally */
-  }
-  
-  h1 {
-    font-size: 3.2em;
-    line-height: 1.1;
-    margin: 0; /* Removes default margin */
-    padding-top: 50px; /* Adds some space from the top */
-  }
+  width: 100%;
+  position: absolute;
+  top: 0;
+}
 
-  .home-container {
-    position: relative;
-    width: 100%;
-    height: 100vh;
-  }
+/* Circular button styling for general questions */
+.big-button {
+  position: absolute;
+  left: 11vw;
+  top: 50%;
+  width: 30vw;
+  height: 30vw;
+  border-radius: 50%;
+  font-size: 3em;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  background-color: #1a1a1a;
+  cursor: pointer;
+  transition: border-color 0.25s;
+  border: 2px solid transparent;
+  transform: translateY(-50%);
+}
 
-  
-  .big-button {
-    position: absolute;
-    width: 30vw; /* 30% of viewport width */
-    height: 30vw; /* Makes it a circle */
-    border-radius: 50%; /* Ensures circular shape */
-    font-size: 3em;
-    font-weight: 500;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    background-color: #1a1a1a;
-    cursor: pointer;
-    transition: border-color 0.25s;
-    border: 2px solid transparent;
-  }
-  
+/* Hover effect for circular button */
+.big-button:hover {
+  border-color: #2d37f8;
+  background-color: #646cff;
+}
 
-  .question-button {
-    left: 11vw; /* 5% padding from left side */
-    top: 50%;
-    transform: translateY(-50%); /* Center vertically */
-  }
-  
-  /* Right button styling */
-  .request-button {
-    right: 11vw; /* 5% padding from right side */
-    top: 50%;
-    transform: translateY(-50%); /* Center vertically */
-  }
-  
-  /* Button hover effects */
-  .question-button:hover,
-  .request-button:hover {
-    border-color: #2d37f8;
-    background-color: #646cff;
-  }
+/* Container for right-aligned, vertically stacked buttons */
+.episode-buttons {
+  position: absolute;
+  right: 15vw; /* Distance from right side of the viewport */
+  top: 20%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px; /* Spacing between buttons */
+}
+
+/* Styling for each rectangular button */
+.rect-button {
+  width: 200px;
+  padding: 15px 20px;
+  font-size: 1.2em;
+  font-weight: 500;
+  color: white;
+  background-color: #1a1a1a;
+  border: none;
+  border-radius: 25px; /* Rounded rectangle */
+  cursor: pointer;
+  transition: background-color 0.25s;
+}
+
+/* Hover effect for rectangular buttons */
+.rect-button:hover {
+  background-color: #646cff;
+}
