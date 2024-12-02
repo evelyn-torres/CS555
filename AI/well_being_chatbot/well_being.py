@@ -1,20 +1,9 @@
 #well_being_convo
 import random
-from textblob import TextBlob
 
 class AIConvo:
     def __init__(self):
         self.responses=[]
-    def analyze_response(self, response):
-        analysis = TextBlob(response)
-        sentiment = analysis.sentiment.polarity
-        if sentiment > 0.5:
-            return "I'm glad to hear that! What's something positive that happened today?"
-        elif sentiment < 0:
-            return "I'm sorry to hear that. Do you want to talk about it?"
-        else:
-            return "That’s interesting. Can you tell me more?"
-
     def ask_question1(self):
         return "How are you feeling today?"
     
