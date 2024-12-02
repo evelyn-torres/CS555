@@ -1,10 +1,10 @@
 # AI/well_being_chatbot/app.py
 from flask import Flask, request, jsonify
 from well_being import AIConvo
-#from flask_cors import CORS
+from flask_cors import CORS
 
 app = Flask(__name__)
-#CORS(app)
+CORS(app)
 ai_convo = AIConvo()
 
 @app.route('/ask', methods=['GET'])
