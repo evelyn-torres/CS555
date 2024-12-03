@@ -2,8 +2,11 @@ import React, { Suspense, lazy, useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Navigation from './components/Navigation';
 
+
+
 const Home = lazy(() => import('./pages/Home'));
 const Login = lazy(() => import('./pages/Login'));
+const ChatBotComponent = lazy(() => import('./pages/chabotUI'));
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -33,6 +36,9 @@ function App() {
               isAuthenticated ? <Home /> : <Navigate to="/" replace />
             }
           />
+        {/** Chatbot UI route */}
+          <Route
+            path='/chatbot' element={<ChatBotComponent />} />
         </Routes>
       </Suspense>
     </Router>
@@ -40,4 +46,3 @@ function App() {
 }
 
 export default App;
-
