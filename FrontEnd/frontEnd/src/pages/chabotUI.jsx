@@ -1,86 +1,86 @@
 import React, { useState, useEffect } from 'react';
 import '../styles/ChatBotUI.css';
 
-
 const ChatBotUIComp = () => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
 
   // Fetch the initial question from the backend on component load
   useEffect(() => {
-    fetch("http://localhost:5000/ask")
+    fetch("http://localhost:5000/start")
       .then((response) => response.json())
       .then((data) => {
-        setMessages([{ sender: 'ai', text: data.question }]);
+        setMessages([{ sender: 'ai', text: data.reply }]);
       })
       .catch((error) => console.error('Error fetching initial question:', error));
   }, []);
 
+  // Handle sending user input to the backend
+// Handle sending user input to the backend
+const handleSend = () => {
+  if (input.trim()) {
+    // Append user message
+    setMessages((prevMessages) => [...prevMessages, { sender: 'user', text: input }]);
 
-  //Bad Smell #1: Duplicated Code (handleEnter and handleSend)
-  const handleSend = () => {
-    if (input.trim()) {
-      setMessages((prevMessages) => [...prevMessages, { sender: 'user', text: input }]);
-      setInput('');
+    // Clear input
+    setInput('');
 
-      //send the user response to backend
-      fetch("http://localhost:5000/response",{
-        method: 'POST',
-        headers:{
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({response:input}),
-      })
+    // Send the user response to the backend
+    fetch("http://localhost:5000/response", {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ response: input }),
+    })
       .then((response) => response.json())
       .then((data) => {
-        setMessages((prevMessages)=>[
+        // Append full AI reply
+        setMessages((prevMessages) => [
           ...prevMessages,
-          {sender: 'ai', text: data.next_question},
-        ])
+          { sender: 'ai', text: data.reply }, // Adjusted to use the full reply
+        ]);
       })
       .catch((error) => console.error('Error sending response:', error));
+  }
+};
 
-      // Simulate AI response
-      // setTimeout(() => {
-      //   setMessages((prevMessages) => [
-      //     ...prevMessages,
-      //     { sender: 'ai', text: 'This is an AI response' },
-      //   ]);
-      // }, 1000);
-    }
-  };
-  const handleEnter = (event) =>{
-    if(event.key ==='Enter'){
+
+  // Handle pressing Enter key
+  const handleEnter = (event) => {
+    if (event.key === 'Enter') {
       handleSend();
     }
-    }
-    const renderMessages = () =>
-      messages.map((message, index) => (
-        <div
-          key={index}
-          className={`message ${message.sender === 'user' ? 'user-message' : 'ai-message'}`}
-        >
-          {message.text}
-        </div>
-      ));
+  };
 
-   return ( //Bad smell #2: Really long inline callback logic in the return funcition
+  // Render messages
+  const renderMessages = () =>
+    messages.map((message, index) => (
+      <div
+        key={index}
+        className={`message ${message.sender === 'user' ? 'user-message' : 'ai-message'}`}
+      >
+        {message.text}
+      </div>
+    ));
+
+  return (
     <div className="chatbot-container">
-    <div className="chat-window">{renderMessages()}</div>
-    <div className="input-container">
-      <input
-        type="text"
-        value={input}
-        onChange={(e) => setInput(e.target.value)}
-        placeholder="Type a message..."
-        className="chat-input"
-        onKeyDown={handleEnter}
-      />
-      <button onClick={handleSend} className="send-button">
-        Send
-      </button>
+      <div className="chat-window">{renderMessages()}</div>
+      <div className="input-container">
+        <input
+          type="text"
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          placeholder="Type a message..."
+          className="chat-input"
+          onKeyDown={handleEnter}
+        />
+        <button onClick={handleSend} className="send-button">
+          Send
+        </button>
+      </div>
     </div>
-  </div>
   );
 };
 
