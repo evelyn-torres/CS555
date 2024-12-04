@@ -1,19 +1,28 @@
 // src/pages/Home.jsx
 
-import React from "react";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "../styles/Home.css";
+//import ChatBotUI from "../pages/ChatBotUI"; // Import ChatBotUI component
 
 const Home = () => {
+  const navigate = useNavigate();  // Initialize navigate
+  const handleOpenChatBot = () => {
+    navigate("/chatbot");  // Redirect to ChatBotUI
+  };
+
   return (
     <div className="home-container">
+     
       <div className="header">
         <h1>Vitalink Voice Assist</h1>
         <h2>Select a topic for personalized assistance.</h2>
       </div>
 
       {/* Circular button for general questions */}
-      <button className="big-button question-button">
+      <button className="big-button question-button" onClick={handleOpenChatBot}>
         General Questions
+
       </button>
 
       {/* New vertically stacked rectangular buttons on the right */}
@@ -26,6 +35,7 @@ const Home = () => {
         <button className="rect-button">Medication Guidance</button>
       </div>
     </div>
+    
   );
 };
 
