@@ -38,3 +38,23 @@ Key features include:
   
 **Example:**  
 `feat/SCRUM1-hello-world-implementation`
+
+---
+
+## Make sure to have these downloaded 
+ - **Make sure to  run these installed:**
+  `Inorder to use Whisper by OpenAI you have to have FFMPREG installed, the link to install is here`
+    - https://ffmpeg.org
+  `To make sure you have ffmpeg installed run this:`
+    - ffmpeg -version
+  `If FFMPEG is installed now you can run this`
+  - pip install openai-whisper
+
+## To Run Project
+  cd FrontEnd/frontEnd
+  node server.js
+  npm run dev
+
+  `In a different terminal run these:`
+  cd AI/well_being_chatbot
+  python app.py
