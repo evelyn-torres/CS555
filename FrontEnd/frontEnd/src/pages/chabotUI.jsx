@@ -1,41 +1,74 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../styles/ChatBotUI.css';
 
-const ChatBotUI = () => {
+const ChatBotUIComp = () => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
   const [audioBlob, setAudioBlob] = useState(null);
   const [isRecording, setIsRecording] = useState(false);
-  const [transcription, setTranscription] = useState("");
 
+  // Fetch the initial question from the backend on component load
+  useEffect(() => {
+    fetch("http://localhost:5000/start")
+      .then((response) => response.json())
+      .then((data) => {
+        setMessages([{ sender: 'ai', text: data.reply }]);
+      })
+      .catch((error) => console.error('Error fetching initial question:', error));
+  }, []);
+
+  // Handle sending user input to the backend
+  const handleSend = () => {
+    if (input.trim()) {
+      // Append user message
+      setMessages((prevMessages) => [...prevMessages, { sender: 'user', text: input }]);
+
+      // Clear input
+      setInput('');
+
+      // Send the user response to the backend
+      fetch("http://localhost:5000/response", {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ response: input }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          // Append full AI reply
+          setMessages((prevMessages) => [
+            ...prevMessages,
+            { sender: 'ai', text: data.reply },
+          ]);
+        })
+        .catch((error) => console.error('Error sending response:', error));
+    }
+  };
+
+  // Handle pressing Enter key
+  const handleEnter = (event) => {
+    if (event.key === 'Enter') {
+      handleSend();
+    }
+  };
+
+  // Start audio recording
   const startRecording = () => {
     navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
       const mediaRecorder = new MediaRecorder(stream);
       let audioChunks = [];
 
-      console.log('MediaRecorder started:', mediaRecorder);
-
       mediaRecorder.ondataavailable = (event) => {
-        console.log('ondataavailable event:', event);
         if (event.data.size > 0) {
           audioChunks.push(event.data);
-          console.log('Chunk added:', event.data);
         }
       };
 
-      mediaRecorder.onstart = () => {
-        console.log('Recording started');
-      };
-
       mediaRecorder.onstop = () => {
-        console.log('Recording stopped');
         const audioBlob = new Blob(audioChunks, { type: 'audio/mp3' });
-        console.log('Audio blob created:', audioBlob);
         setAudioBlob(audioBlob);
-      };
-
-      mediaRecorder.onerror = (error) => {
-        console.error('MediaRecorder error:', error);
+        uploadAudio(audioBlob); // Automatically upload the audio after recording
       };
 
       mediaRecorder.start();
@@ -50,76 +83,53 @@ const ChatBotUI = () => {
     });
   };
 
-  const stopRecording = () => {
-    setIsRecording(false);
-  };
-
-  const uploadAudio = async () => {
-    if (!audioBlob) {
+  // Upload audio for transcription
+  const uploadAudio = async (blob) => {
+    if (!blob) {
       console.error('No audio file to upload');
       return;
     }
 
     const formData = new FormData();
-    formData.append('file', audioBlob, 'audio.mp3');
+    formData.append('file', blob, 'audio.mp3');
 
     try {
       const response = await fetch('http://localhost:5000/transcribe-audio', {
         method: 'POST',
         body: formData,
-      })
-      .then((response) => response.json())
-      .then((data) => {
-        // Append full AI reply
-        setMessages((prevMessages) => [
-          ...prevMessages,
-          { sender: 'ai', text: data.reply.reply }, // Adjusted to use the full reply
-        ]);
-      })
+      });
+
       if (!response.ok) {
         const errorResponse = await response.json();
         console.error('Error from server:', errorResponse.error);
       } else {
         const data = await response.json();
-        console.log('Transcription:', data.transcription);
+        // Append transcription and AI reply to messages
+        setMessages((prevMessages) => [
+          ...prevMessages,
+          { sender: 'user', text: data.transcription },
+          { sender: 'ai', text: data.reply.reply },
+        ]);
       }
     } catch (error) {
       console.error('Error uploading audio:', error);
     }
   };
 
-  const handleSend = () => {
-    if (input.trim()) {
-      setMessages([...messages, { sender: 'user', text: input }]);
-      setInput('');
-
-      // Simulate AI response
-      setTimeout(() => {
-        setMessages((prevMessages) => [
-          ...prevMessages,
-          { sender: 'ai', text: 'This is an AI response' },
-        ]);
-      }, 1000);
-    }
-  };
-  const handleEnter = (event) =>{
-    if(event.key ==='Enter'){
-      handleSend();
-    }
-  }
+  // Render messages
+  const renderMessages = () =>
+    messages.map((message, index) => (
+      <div
+        key={index}
+        className={`message ${message.sender === 'user' ? 'user-message' : 'ai-message'}`}
+      >
+        {message.text}
+      </div>
+    ));
 
   return (
     <div className="chatbot-container">
-      <div className="chat-window">
-        {messages.map((message, index) => (
-          <div
-            key={index}
-            className={`message ${message.sender === 'user' ? 'user-message' : 'ai-message'}`}
-          >
-            {message.text}
-          </div>
-        ))}
-      </div>
+      <div className="chat-window">{renderMessages()}</div>
       <div className="input-container">
         <input
           type="text"
@@ -129,17 +139,15 @@ const ChatBotUI = () => {
           className="chat-input"
           onKeyDown={handleEnter}
         />
-        <button onClick={handleSend} className="send-button">Send</button>
-        <button onClick={startRecording} disabled={isRecording}>
-          {isRecording ? "Recording..." : "Start Recording"}
+        <button onClick={handleSend} className="send-button">
+          Send
         </button>
-        {isRecording && <button onClick={stopRecording}>Stop Recording</button>}
-        <button onClick={uploadAudio} disabled={!audioBlob}>
-        Upload Audio
-      </button>
+        <button onClick={startRecording} disabled={isRecording} className="record-button">
+          {isRecording ? 'Recording...' : 'Start Recording'}
+        </button>
       </div>
     </div>
   );
 };
 
-export default ChatBotUI;
+export default ChatBotUIComp;
