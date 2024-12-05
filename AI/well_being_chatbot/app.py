@@ -2,7 +2,7 @@
 from flask import Flask, request, jsonify
 from well_being import AIConvo
 from flask_cors import CORS
-import whisper
+from whisper import *
 import os
 
 app = Flask(__name__)
