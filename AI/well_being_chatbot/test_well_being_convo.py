@@ -2,7 +2,9 @@ import unittest
 
 
 
-from .well_being import AIConvo
+from well_being import AIConvo
+ai_convo = AIConvo()
+print("initialized AICOnvo successfulyyy")
 
 #AI\AI\well_being_chatbot\well_being.py
 
