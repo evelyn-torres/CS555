@@ -1,18 +1,21 @@
 import React, { useState, useEffect } from 'react';
-import '../styles/ChatBotUI.css';
+import '../styles/chatbotUI.css';
 
 const ChatBotUIComp = () => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
   const [audioBlob, setAudioBlob] = useState(null);
   const [isRecording, setIsRecording] = useState(false);
+  const [mediaRecorder, setMediaRecorder] = useState(null);
 
   // Fetch the initial question from the backend on component load
   useEffect(() => {
     fetch("http://localhost:5000/start")
       .then((response) => response.json())
       .then((data) => {
-        setMessages([{ sender: 'ai', text: data.reply }]);
+        const aiMessage = { sender: 'ai', text: data.reply };
+        setMessages([aiMessage]);
+        speak(aiMessage.text); // Speak the AI's reply
       })
       .catch((error) => console.error('Error fetching initial question:', error));
   }, []);
@@ -20,13 +23,10 @@ const ChatBotUIComp = () => {
   // Handle sending user input to the backend
   const handleSend = () => {
     if (input.trim()) {
-      // Append user message
-      setMessages((prevMessages) => [...prevMessages, { sender: 'user', text: input }]);
-
-      // Clear input
+      const userMessage = { sender: 'user', text: input };
+      setMessages((prevMessages) => [...prevMessages, userMessage]);
       setInput('');
 
-      // Send the user response to the backend
       fetch("http://localhost:5000/response", {
         method: 'POST',
         headers: {
@@ -36,17 +36,14 @@ const ChatBotUIComp = () => {
       })
         .then((response) => response.json())
         .then((data) => {
-          // Append full AI reply
-          setMessages((prevMessages) => [
-            ...prevMessages,
-            { sender: 'ai', text: data.reply },
-          ]);
+          const aiMessage = { sender: 'ai', text: data.reply };
+          setMessages((prevMessages) => [...prevMessages, aiMessage]);
+          speak(aiMessage.text); // Speak the AI's reply
         })
         .catch((error) => console.error('Error sending response:', error));
     }
   };
 
-  // Handle pressing Enter key
   const handleEnter = (event) => {
     if (event.key === 'Enter') {
       handleSend();
@@ -56,31 +53,36 @@ const ChatBotUIComp = () => {
   // Start audio recording
   const startRecording = () => {
     navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
-      const mediaRecorder = new MediaRecorder(stream);
+      const recorder = new MediaRecorder(stream);
       let audioChunks = [];
 
-      mediaRecorder.ondataavailable = (event) => {
+      recorder.ondataavailable = (event) => {
         if (event.data.size > 0) {
           audioChunks.push(event.data);
         }
       };
 
-      mediaRecorder.onstop = () => {
+      recorder.onstop = () => {
         const audioBlob = new Blob(audioChunks, { type: 'audio/mp3' });
         setAudioBlob(audioBlob);
-        uploadAudio(audioBlob); // Automatically upload the audio after recording
+        uploadAudio(audioBlob);
       };
 
-      mediaRecorder.start();
+      recorder.start();
       setIsRecording(true);
-
-      setTimeout(() => {
-        mediaRecorder.stop();
-        setIsRecording(false);
-      }, 5000); // Stops recording after 5 seconds
+      setMediaRecorder(recorder);
     }).catch((error) => {
       console.error('Error accessing microphone:', error);
     });
+  };
+
+  // Stop audio recording
+  const stopRecording = () => {
+    if (mediaRecorder && isRecording) {
+      mediaRecorder.stop();
+      setIsRecording(false);
+      setMediaRecorder(null);
+    }
   };
 
   // Upload audio for transcription
@@ -104,19 +106,32 @@ const ChatBotUIComp = () => {
         console.error('Error from server:', errorResponse.error);
       } else {
         const data = await response.json();
-        // Append transcription and AI reply to messages
+        const userMessage = { sender: 'user', text: data.transcription };
+        const aiMessage = { sender: 'ai', text: data.reply };
+
         setMessages((prevMessages) => [
           ...prevMessages,
-          { sender: 'user', text: data.transcription },
-          { sender: 'ai', text: data.reply.reply },
+          userMessage,
+          aiMessage,
         ]);
+        speak(aiMessage.text); // Speak the AI's reply
       }
     } catch (error) {
       console.error('Error uploading audio:', error);
     }
   };
 
-  // Render messages
+  // Text-to-Speech Function
+  const speak = (text) => {
+    if ('speechSynthesis' in window) {
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = 'en-US'; // Set language to English (US)
+      speechSynthesis.speak(utterance);
+    } else {
+      console.error('Text-to-Speech not supported in this browser.');
+    }
+  };
+
   const renderMessages = () =>
     messages.map((message, index) => (
       <div
@@ -142,9 +157,15 @@ const ChatBotUIComp = () => {
         <button onClick={handleSend} className="send-button">
           Send
         </button>
-        <button onClick={startRecording} disabled={isRecording} className="record-button">
-          {isRecording ? 'Recording...' : 'Start Recording'}
-        </button>
+        {!isRecording ? (
+          <button onClick={startRecording} className="record-button">
+            Start Recording
+          </button>
+        ) : (
+          <button onClick={stopRecording} className="stop-button">
+            Stop Recording
+          </button>
+        )}
       </div>
     </div>
   );

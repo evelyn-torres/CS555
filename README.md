@@ -51,10 +51,11 @@ Key features include:
   - pip install openai-whisper
 
 ## To Run Project
-  - cd FrontEnd/frontEnd
-  - node server.js
-  - npm run dev
+  cd FrontEnd/frontEnd
+  node server.js
+  npm run dev
 
   `In a different terminal run these:`
-  - cd AI/well_being_chatbot
-  - python app.py
+  cd AI/well_being_chatbot
+  python app.py
+                    

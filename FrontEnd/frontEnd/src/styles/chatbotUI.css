@@ -1,65 +1,71 @@
-/* Parent container to center the chatbot box */
+/* Parent container for centering the chatbot */
 .parent-container {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh; /* Full viewport height */
+  width: 100vw; /* Full viewport width */
   background-color: #f0f0f0; /* Optional: background color for the parent container */
+  margin: 0; /* Remove default margin */
 }
 
+/* Chatbot container takes up the full screen */
 .chatbot-container {
-  width: 400px;
-  height: 500px;
-  border-radius: 10px;
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  border-radius: 0; /* Remove rounded corners to fit full screen */
+  box-shadow: none; /* Remove box shadow for full screen */
   display: flex;
   flex-direction: column;
   overflow: hidden;
   font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif, sans-serif;
-  outline: 2px solid #0078d4; /* Blue outline */
+  outline: 2px solid #0078d4; /* Optional: blue outline for focus */
 }
 
+/* Chat window takes up most of the space */
 .chat-window {
   flex: 1;
   padding: 10px;
   overflow-y: auto;
   background-color: #f7f7f7;
   display: flex;
-  flex-direction: column; /* Ensure messages are stacked vertically */
+  flex-direction: column; /* Stack messages vertically */
 }
 
+/* Adjust message bubbles */
 .message {
   display: inline-block;
   margin: 10px 0;
-  padding: 10px 15px; /* Add padding to create space around the text */
+  padding: 10px 15px;
   border-radius: 20px;
-  max-width: 75%; /* Limit max width to 75% of the chat container */
-  word-wrap: break-word; /* Ensure long words break properly */
+  max-width: 75%; /* Limit width to 75% of chat window */
+  word-wrap: break-word;
   position: relative;
   clear: both;
-  width: fit-content; /* Allow the width to adjust based on the content */
+  width: fit-content; /* Adjust width based on content */
 }
 
 .user-message {
   background-color: #0078d4;
   color: white;
   align-self: flex-end;
-  margin-left: auto; /* Align to the right */
+  margin-left: auto;
   border-bottom-right-radius: 0;
-  padding: 10px 15px; /* Consistent padding around the text */
-  margin-right: 10px; /* Add some margin to the right */
+  padding: 10px 15px;
+  margin-right: 10px;
 }
 
 .ai-message {
   background-color: #e5e5e5;
   color: #333;
   align-self: flex-start;
-  margin-right: auto; /* Align to the left */
+  margin-right: auto;
   border-bottom-left-radius: 0;
-  padding: 10px 15px; /* Consistent padding around the text */
-  margin-left: 10px; /* Add some margin to the left */
+  padding: 10px 15px;
+  margin-left: 10px;
 }
 
+/* Input container at the bottom */
 .input-container {
   display: flex;
   padding: 10px;
@@ -67,6 +73,7 @@
   border-top: 1px solid #ddd;
 }
 
+/* Chat input field */
 .chat-input {
   flex: 1;
   padding: 10px;
@@ -75,6 +82,7 @@
   margin-right: 10px;
 }
 
+/* Send button styles */
 .send-button {
   background-color: #0078d4;
   color: white;
@@ -87,4 +95,11 @@
 
 .send-button:hover {
   background-color: #005a9e;
+}
+
+/* Optional recording indicator */
+.recording-indicator {
+  font-size: 0.9rem;
+  color: red;
+  margin-top: 10px;
 }

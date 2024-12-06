@@ -2,7 +2,7 @@
 from flask import Flask, request, jsonify
 from well_being import AIConvo
 from flask_cors import CORS
-from whisper import *
+import whisper 
 import os
 
 app = Flask(__name__)
@@ -54,6 +54,31 @@ def transcribe_audio():
         print(f"Error occurred: {e}")
         return jsonify({'error': str(e)}), 500
 
+@app.route('/transcribe-whisper', methods=['POST'])
+def transcribe():
+    try:
+        # Check if file is included in the request
+        if 'file' not in request.files:
+            return jsonify({'error': 'No file part in the request'}), 400
+
+        file = request.files['file']
+
+        # Save the file temporarily
+        file_path = os.path.join('temp', file.filename)
+        os.makedirs('temp', exist_ok=True)
+        file.save(file_path)
+
+        # Use Whisper to transcribe the audio
+        model = whisper.load_model("base")
+        result = model.transcribe(file_path)
+        transcription = result['text']
+        # Clean up
+        os.remove(file_path)
+        return jsonify({'transcription': transcription}), 200
+    except Exception as e:
+        # Log the error for debugging
+        print(f"Error occurred: {e}")
+        return jsonify({'error': str(e)}), 500
 
 @app.route('/response', methods=['POST'])
 def log_response():
