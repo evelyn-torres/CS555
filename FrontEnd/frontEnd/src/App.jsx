@@ -7,6 +7,7 @@ import Navigation from './components/Navigation';
 const Home = lazy(() => import('./pages/Home'));
 const Login = lazy(() => import('./pages/Login'));
 const ChatBotComponent = lazy(() => import('./pages/chabotUI'));
+const ChatGPTPage = lazy(() => import('./pages/chatGPT'));
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -39,6 +40,9 @@ function App() {
         {/** Chatbot UI route */}
           <Route
             path='/chatbot' element={<ChatBotComponent />} />
+        {/* Other Chatbot UI route */}
+          <Route
+            path='/chatGPT' element={<ChatGPTPage />} />
         </Routes>
       </Suspense>
     </Router>

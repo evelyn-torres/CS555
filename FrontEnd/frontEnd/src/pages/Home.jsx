@@ -2,6 +2,7 @@
 
 import React from "react";
 import "../styles/Home.css";
+import { Link } from "react-router-dom";
 
 const Home = () => {
   return (
@@ -13,17 +14,39 @@ const Home = () => {
 
       {/* Circular button for general questions */}
       <button className="big-button question-button">
+        <Link to="/chatbot" style={{ textDecoration: 'none', color: 'inherit' }}>
         General Questions
+        </Link>
       </button>
 
       {/* New vertically stacked rectangular buttons on the right */}
       <div className="episode-buttons">
         <h2>Explore a Specific Topic</h2>
-        <button className="rect-button">Hypertension</button>
-        <button className="rect-button">Diabetes</button>
-        <button className="rect-button">Diet Management</button>
-        <button className="rect-button">Sports & Exercise</button>
-        <button className="rect-button">Medication Guidance</button>
+        <button className="rect-button">
+        <Link to='/chatGPT' style={{ textDecoration: 'none', color: 'inherit' }}>
+        Hypertension
+        </Link>
+        </button>
+        <button className="rect-button">
+        <Link to='/chatGPT' style={{ textDecoration: 'none', color: 'inherit' }}>
+        Diabetes
+        </Link>
+        </button>
+        <button className="rect-button">
+        <Link to='/chatGPT' style={{ textDecoration: 'none', color: 'inherit' }}>
+        Diet Management
+        </Link>
+        </button>
+        <button className="rect-button">
+        <Link to='/chatGPT' style={{ textDecoration: 'none', color: 'inherit' }}>
+        Sports & Exercise
+        </Link>
+        </button>
+        <button className="rect-button">
+        <Link to='/chatGPT' style={{ textDecoration: 'none', color: 'inherit' }}>
+        Medication Guidance
+        </Link>
+        </button>
       </div>
     </div>
   );
