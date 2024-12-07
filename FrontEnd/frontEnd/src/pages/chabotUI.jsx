@@ -166,6 +166,7 @@ const ChatBotUIComp = () => {
             Stop Recording
           </button>
         )}
+
       </div>
     </div>
   );

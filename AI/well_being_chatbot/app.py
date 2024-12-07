@@ -53,7 +53,6 @@ def transcribe_audio():
         # Log the error for debugging
         print(f"Error occurred: {e}")
         return jsonify({'error': str(e)}), 500
-
 @app.route('/transcribe-whisper', methods=['POST'])
 def transcribe():
     try:
@@ -79,7 +78,6 @@ def transcribe():
         # Log the error for debugging
         print(f"Error occurred: {e}")
         return jsonify({'error': str(e)}), 500
-
 @app.route('/response', methods=['POST'])
 def log_response():
     data = request.get_json()

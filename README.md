@@ -58,4 +58,3 @@ Key features include:
   `In a different terminal run these:`
   cd AI/well_being_chatbot
   python app.py
-                    
