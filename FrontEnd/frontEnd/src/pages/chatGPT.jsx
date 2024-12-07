@@ -9,6 +9,7 @@ const ChatGPTPage = () => {
     const [chatHistory, setChatHistory] = useState([]);
     const [error, setError] = useState("");
     const [mediaRecorder, setMediaRecorder] = useState(null);
+    const [language, setLanguage] = useState("English");
 
     useEffect(() => {
         console.log("audioBlob state updated:", audioBlob);
@@ -108,7 +109,7 @@ const ChatGPTPage = () => {
             const transcription = data.transcription;
             console.log("Transcription received:", transcription);
 
-            const rawAiResponse = await generateResponse(transcription);
+            const rawAiResponse = await generateResponse(transcription, language);
             console.log("Raw AI Response received:", rawAiResponse);
 
             // Clean and format the AI response
@@ -159,6 +160,21 @@ const ChatGPTPage = () => {
         if (e.key === "Enter") handleSend();
     };
 
+    const handleEnlish = () => {
+        setLanguage("English");
+    }
+
+    const handleSpanish = () => {
+        setLanguage("Spanish");
+    }
+    const handleChinese = () => {
+        setLanguage("Chinese");
+    }
+
+    const handleKorean = () => {
+        setLanguage("Korean");
+    }
+
     const renderMessages = () =>
         chatHistory.map((msg, index) => (
             <div
@@ -191,7 +207,15 @@ const ChatGPTPage = () => {
         if (!text) return;
         speechSynthesis.cancel(); // Stop any ongoing speech
         const utterance = new SpeechSynthesisUtterance(text);
-        utterance.lang = "en-US";
+        if (language === "English") {
+            utterance.lang = "en-US"; // American English
+        } else if (language === "Spanish") {
+            utterance.lang = "es-ES"; // Spanish (Spain)
+        } else if (language === "Chinese") {
+            utterance.lang = "zh-CN"; // Simplified Chinese (Mandarin)
+        } else if (language === "Korean") {
+            utterance.lang = "ko-KR"; // Korean
+        }
         speechSynthesis.speak(utterance);
     };
 
@@ -221,6 +245,20 @@ const ChatGPTPage = () => {
                 )}
                 <button onClick={processAudio} disabled={!audioBlob} className="process-button">
                     Process Audio
+                </button>
+            </div>
+            <div className='language buttons'>
+                <button onClick={handleEnlish} className="english-button">
+                    Set Language to English
+                </button>
+                <button onClick={handleSpanish} className="spanish-button">
+                    Set Language to Spanish
+                </button>
+                <button onClick={handleChinese} className="chinese-button">
+                    Set Language to Chinese
+                </button>
+                <button onClick={handleKorean} className="korean-button">
+                    Set Language to Korean
                 </button>
             </div>
         </div>
